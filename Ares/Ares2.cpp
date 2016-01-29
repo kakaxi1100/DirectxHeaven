@@ -1,7 +1,11 @@
 // Ares.cpp : Defines the entry point for the application.
 //
 
+
 #include "stdafx.h"
+
+#define INITGUID 
+
 #include <mmsystem.h>
 #include <iostream.h> // include important C/C++ stuff
 #include <conio.h>
@@ -14,18 +18,22 @@
 #include <math.h>
 #include <io.h>
 #include <fcntl.h>
-
-#include <ddraw.h> // include directdraw
+#include "ddraw.h"
 
 #define TIMER_ID_1SEC 1
 #define TIMER_ID_3SEC 2
 #define WINDOW_CLASS_NAME "WINCLASS1"
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+#define SCREEN_BPP 8
 
+LPDIRECTDRAW7         lpdd7         = NULL; 
+HWND      main_window_handle = NULL;
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
-	char buff[50];
+	//char buff[50];
 	switch(msg) {
 	case WM_CREATE:
 		return 0;
@@ -58,12 +66,33 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 int Game_Init()
 {
-	if (FAILED(DirectDrawCreate()))
+	if (FAILED(DirectDrawCreateEx(NULL, (void**)&lpdd7,IID_IDirectDraw7, NULL)))
 	{
+		return 0;
+	}
+	if (FAILED(lpdd7->SetCooperativeLevel(main_window_handle, 
+											DDSCL_FULLSCREEN | DDSCL_ALLOWMODEX |
+											DDSCL_EXCLUSIVE | DDSCL_ALLOWREBOOT)))
+	{
+		return 0;
+	}
+
+	lpdd7->SetDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT,SCREEN_BPP,0,0);
+	return 1;
+}
+int Game_Main()
+{
+	return 1;
+}
+int Game_ShutDown()
+{
+	if (lpdd7)
+	{
+		lpdd7->Release();
+		lpdd7 = NULL;
 	}
 	return 1;
 }
-
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
@@ -73,8 +102,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
  	WNDCLASSEX winclass;
 	HWND hwnd;
 	MSG msg;
-	HDC hdc;
-	char buff[50];
+//	HDC hdc;
+//	char buff[50];
 
 	winclass.cbSize = sizeof(WNDCLASSEX);
 	winclass.style = CS_DBLCLKS | CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
@@ -84,7 +113,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	winclass.hInstance = hInstance;
 	winclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	winclass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	winclass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	winclass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 	winclass.lpszMenuName = NULL;
 	winclass.lpszClassName = WINDOW_CLASS_NAME;
 	winclass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
@@ -100,7 +129,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	{
 		return 0;
 	}
-
+	main_window_handle = hwnd;
 	Game_Init();
 //	SetTimer(hwnd, TIMER_ID_1SEC, 1000, NULL);
 //	SetTimer(hwnd, TIMER_ID_3SEC, 3000, NULL);
@@ -117,16 +146,18 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 
-		hdc = GetDC(hwnd);
+		/*hdc = GetDC(hwnd);
 		SetTextColor(hdc, RGB(rand()%255, rand()%255, rand()%255));
 		SetBkColor(hdc, RGB(rand()%255, rand()%255, rand()%255));
 		SetBkMode(hdc, TRANSPARENT);
 		sprintf(buff, "this is %d", 1);
 		TextOut(hdc, 100,100, buff, strlen(buff));
-		ReleaseDC(hwnd,hdc);
+		ReleaseDC(hwnd,hdc);*/
 
-		//Game_Main();
+		Game_Main();
 	}
+
+	Game_ShutDown();
 	return msg.wParam;
 }
 
