@@ -1,0 +1,132 @@
+﻿  stdafx.cpp
+  test.cpp
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusimaging.h(78): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusimaging.h(79): error C2440: “初始化”: 无法从“const char [37]”转换为“int”
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusimaging.h(79): note: 没有使该转换得以执行的上下文
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusimaging.h(79): error C2146: 语法错误: 缺少“;”(在标识符“IImageBytes”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusimaging.h(79): error C2059: 语法错误:“public”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusimaging.h(80): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusimaging.h(80): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusimaging.h(285): error C3646: “id”: 未知重写说明符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusimaging.h(285): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(390): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(401): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(411): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(449): error C2061: 语法错误: 标识符“PROPID”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(450): error C2061: 语法错误: 标识符“PROPID”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(451): error C2061: 语法错误: 标识符“PROPID”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(459): error C2061: 语法错误: 标识符“PROPID”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(477): error C2535: “Gdiplus::Image::Image(void)”: 已经定义或声明成员函数
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(390): note: 参见“Gdiplus::Image::Image”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(512): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(523): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(767): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(822): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(822): error C2535: “Gdiplus::Metafile::Metafile(void)”: 已经定义或声明成员函数
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(767): note: 参见“Gdiplus::Metafile::Metafile”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(829): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(829): error C2535: “Gdiplus::Metafile::Metafile(void)”: 已经定义或声明成员函数
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(767): note: 参见“Gdiplus::Metafile::Metafile”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(838): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(838): error C2535: “Gdiplus::Metafile::Metafile(void)”: 已经定义或声明成员函数
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(767): note: 参见“Gdiplus::Metafile::Metafile”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(864): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(932): error C2535: “Gdiplus::Metafile::Metafile(void)”: 已经定义或声明成员函数
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusheaders.h(767): note: 参见“Gdiplus::Metafile::Metafile”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1145): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1145): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1145): error C2065: “image”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1145): error C2275: “Gdiplus::GpImage”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusgpstubs.h(66): note: 参见“Gdiplus::GpImage”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1145): warning C4229: 使用了记时错误: 忽略数据上的修饰符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1151): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1151): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1151): error C2065: “image”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1151): error C2275: “Gdiplus::GpImage”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusgpstubs.h(66): note: 参见“Gdiplus::GpImage”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1151): warning C4229: 使用了记时错误: 忽略数据上的修饰符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1168): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1256): error C2061: 语法错误: 标识符“PROPID”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1259): error C2061: 语法错误: 标识符“PROPID”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1262): error C2061: 语法错误: 标识符“PROPID”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1274): error C2061: 语法错误: 标识符“PROPID”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1298): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1298): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1298): error C2065: “bitmap”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1298): error C2275: “Gdiplus::GpBitmap”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusgpstubs.h(67): note: 参见“Gdiplus::GpBitmap”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1298): warning C4229: 使用了记时错误: 忽略数据上的修饰符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1304): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1304): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1304): error C2065: “bitmap”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1304): error C2275: “Gdiplus::GpBitmap”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusgpstubs.h(67): note: 参见“Gdiplus::GpBitmap”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(1304): warning C4229: 使用了记时错误: 忽略数据上的修饰符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2235): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2235): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2237): error C2065: “header”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2237): error C2275: “Gdiplus::MetafileHeader”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetaheader.h(117): note: 参见“Gdiplus::MetafileHeader”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2237): warning C4229: 使用了记时错误: 忽略数据上的修饰符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2255): error C2061: 语法错误: 标识符“IStream”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2275): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2275): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2275): error C2065: “metafile”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2275): error C2275: “Gdiplus::GpMetafile”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusgpstubs.h(68): note: 参见“Gdiplus::GpMetafile”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2275): warning C4229: 使用了记时错误: 忽略数据上的修饰符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2322): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2322): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2323): error C2275: “HDC”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\shared\windef.h(80): note: 参见“HDC”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2323): error C2146: 语法错误: 缺少“)”(在标识符“referenceHdc”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2333): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2333): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2334): error C2275: “HDC”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\shared\windef.h(80): note: 参见“HDC”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusflat.h(2334): error C2146: 语法错误: 缺少“)”(在标识符“referenceHdc”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdipluspath.h(138): error C2061: 语法错误: 标识符“byte”
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(80): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(80): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(80): error C2761: “{ctor}”: 不允许成员函数重新声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(81): error C2448: “Gdiplus::Metafile::{ctor}”: 函数样式初始值设定项类似函数定义
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(199): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(199): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(200): error C2275: “HDC”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\shared\windef.h(80): note: 参见“HDC”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(200): error C2146: 语法错误: 缺少“)”(在标识符“referenceHdc”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(204): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(204): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(216): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(216): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(217): error C2275: “HDC”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\shared\windef.h(80): note: 参见“HDC”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(217): error C2146: 语法错误: 缺少“)”(在标识符“referenceHdc”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(223): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(223): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(235): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(235): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(236): error C2275: “HDC”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\shared\windef.h(80): note: 参见“HDC”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(236): error C2146: 语法错误: 缺少“)”(在标识符“referenceHdc”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(242): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(242): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(284): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(284): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(286): error C2065: “header”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(286): error C2275: “Gdiplus::MetafileHeader”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetaheader.h(117): note: 参见“Gdiplus::MetafileHeader”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(286): error C2761: “GetMetafileHeader”: 不允许成员函数重新声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusmetafile.h(287): error C2448: “Gdiplus::Metafile::GetMetafileHeader”: 函数样式初始值设定项类似函数定义
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusbitmap.h(50): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusbitmap.h(50): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusbitmap.h(52): error C2275: “BOOL”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(157): note: 参见“BOOL”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusbitmap.h(52): error C2146: 语法错误: 缺少“)”(在标识符“useEmbeddedColorManagement”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusbitmap.h(53): error C2143: 语法错误: 缺少“;”(在“{”的前面)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusbitmap.h(53): error C2447: “{”: 缺少函数标题(是否是老式的形式表?)
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusbitmap.h(85): error C2065: “IStream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusbitmap.h(85): error C2065: “stream”: 未声明的标识符
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusbitmap.h(87): error C2275: “BOOL”: 将此类型用作表达式非法
+  c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(157): note: 参见“BOOL”的声明
+c:\program files (x86)\windows kits\8.1\include\um\gdiplusbitmap.h(87): fatal error C1003: 错误计数超过 100；正在停止编译

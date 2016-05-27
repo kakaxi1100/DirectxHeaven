@@ -1,10 +1,12 @@
-function factory1(_ENV)
-	return function()
-				return a
-			end
-end
+wk = setmetatable({}, {__mode = "k"})
+wv = setmetatable({},{__mode = "v"})
 
-f1 = factory1{a = 6}
-f2 = factory1{a = 7}
-print(f1())
-print(f2())
+o = {}
+wv[1] = o; wk[o] = 10
+
+setmetatable(o, {__gc=function ( o )
+	print(wk[o], wv[1])
+end})
+
+o = nil;
+collectgarbage();-->10  nil

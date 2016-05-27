@@ -1,0 +1,128 @@
+# Project: LuaLib
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = ../Lua/lua-5.2.4/src/lapi.o ../Lua/lua-5.2.4/src/lauxlib.o ../Lua/lua-5.2.4/src/lbaselib.o ../Lua/lua-5.2.4/src/lbitlib.o ../Lua/lua-5.2.4/src/lcode.o ../Lua/lua-5.2.4/src/lcorolib.o ../Lua/lua-5.2.4/src/lctype.o ../Lua/lua-5.2.4/src/ldblib.o ../Lua/lua-5.2.4/src/ldebug.o ../Lua/lua-5.2.4/src/ldo.o ../Lua/lua-5.2.4/src/ldump.o ../Lua/lua-5.2.4/src/lfunc.o ../Lua/lua-5.2.4/src/lgc.o ../Lua/lua-5.2.4/src/linit.o ../Lua/lua-5.2.4/src/liolib.o ../Lua/lua-5.2.4/src/llex.o ../Lua/lua-5.2.4/src/lmathlib.o ../Lua/lua-5.2.4/src/lmem.o ../Lua/lua-5.2.4/src/loadlib.o ../Lua/lua-5.2.4/src/lobject.o ../Lua/lua-5.2.4/src/lopcodes.o ../Lua/lua-5.2.4/src/loslib.o ../Lua/lua-5.2.4/src/lparser.o ../Lua/lua-5.2.4/src/lstate.o ../Lua/lua-5.2.4/src/lstring.o ../Lua/lua-5.2.4/src/lstrlib.o ../Lua/lua-5.2.4/src/ltable.o ../Lua/lua-5.2.4/src/ltablib.o ../Lua/lua-5.2.4/src/ltm.o ../Lua/lua-5.2.4/src/lua.o ../Lua/lua-5.2.4/src/luac.o ../Lua/lua-5.2.4/src/lundump.o ../Lua/lua-5.2.4/src/lvm.o ../Lua/lua-5.2.4/src/lzio.o
+LINKOBJ  = ../Lua/lua-5.2.4/src/lapi.o ../Lua/lua-5.2.4/src/lauxlib.o ../Lua/lua-5.2.4/src/lbaselib.o ../Lua/lua-5.2.4/src/lbitlib.o ../Lua/lua-5.2.4/src/lcode.o ../Lua/lua-5.2.4/src/lcorolib.o ../Lua/lua-5.2.4/src/lctype.o ../Lua/lua-5.2.4/src/ldblib.o ../Lua/lua-5.2.4/src/ldebug.o ../Lua/lua-5.2.4/src/ldo.o ../Lua/lua-5.2.4/src/ldump.o ../Lua/lua-5.2.4/src/lfunc.o ../Lua/lua-5.2.4/src/lgc.o ../Lua/lua-5.2.4/src/linit.o ../Lua/lua-5.2.4/src/liolib.o ../Lua/lua-5.2.4/src/llex.o ../Lua/lua-5.2.4/src/lmathlib.o ../Lua/lua-5.2.4/src/lmem.o ../Lua/lua-5.2.4/src/loadlib.o ../Lua/lua-5.2.4/src/lobject.o ../Lua/lua-5.2.4/src/lopcodes.o ../Lua/lua-5.2.4/src/loslib.o ../Lua/lua-5.2.4/src/lparser.o ../Lua/lua-5.2.4/src/lstate.o ../Lua/lua-5.2.4/src/lstring.o ../Lua/lua-5.2.4/src/lstrlib.o ../Lua/lua-5.2.4/src/ltable.o ../Lua/lua-5.2.4/src/ltablib.o ../Lua/lua-5.2.4/src/ltm.o ../Lua/lua-5.2.4/src/lua.o ../Lua/lua-5.2.4/src/luac.o ../Lua/lua-5.2.4/src/lundump.o ../Lua/lua-5.2.4/src/lvm.o ../Lua/lua-5.2.4/src/lzio.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+BIN      = LuaLib.a
+CXXFLAGS = $(CXXINCS) 
+CFLAGS   = $(INCS) 
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(LINKOBJ)
+	ar r $(BIN) $(LINKOBJ)
+	ranlib $(BIN)
+
+../Lua/lua-5.2.4/src/lapi.o: ../Lua/lua-5.2.4/src/lapi.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lapi.c -o ../Lua/lua-5.2.4/src/lapi.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lauxlib.o: ../Lua/lua-5.2.4/src/lauxlib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lauxlib.c -o ../Lua/lua-5.2.4/src/lauxlib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lbaselib.o: ../Lua/lua-5.2.4/src/lbaselib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lbaselib.c -o ../Lua/lua-5.2.4/src/lbaselib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lbitlib.o: ../Lua/lua-5.2.4/src/lbitlib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lbitlib.c -o ../Lua/lua-5.2.4/src/lbitlib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lcode.o: ../Lua/lua-5.2.4/src/lcode.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lcode.c -o ../Lua/lua-5.2.4/src/lcode.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lcorolib.o: ../Lua/lua-5.2.4/src/lcorolib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lcorolib.c -o ../Lua/lua-5.2.4/src/lcorolib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lctype.o: ../Lua/lua-5.2.4/src/lctype.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lctype.c -o ../Lua/lua-5.2.4/src/lctype.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/ldblib.o: ../Lua/lua-5.2.4/src/ldblib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/ldblib.c -o ../Lua/lua-5.2.4/src/ldblib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/ldebug.o: ../Lua/lua-5.2.4/src/ldebug.c
+	$(CC) -c ../Lua/lua-5.2.4/src/ldebug.c -o ../Lua/lua-5.2.4/src/ldebug.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/ldo.o: ../Lua/lua-5.2.4/src/ldo.c
+	$(CC) -c ../Lua/lua-5.2.4/src/ldo.c -o ../Lua/lua-5.2.4/src/ldo.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/ldump.o: ../Lua/lua-5.2.4/src/ldump.c
+	$(CC) -c ../Lua/lua-5.2.4/src/ldump.c -o ../Lua/lua-5.2.4/src/ldump.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lfunc.o: ../Lua/lua-5.2.4/src/lfunc.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lfunc.c -o ../Lua/lua-5.2.4/src/lfunc.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lgc.o: ../Lua/lua-5.2.4/src/lgc.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lgc.c -o ../Lua/lua-5.2.4/src/lgc.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/linit.o: ../Lua/lua-5.2.4/src/linit.c
+	$(CC) -c ../Lua/lua-5.2.4/src/linit.c -o ../Lua/lua-5.2.4/src/linit.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/liolib.o: ../Lua/lua-5.2.4/src/liolib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/liolib.c -o ../Lua/lua-5.2.4/src/liolib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/llex.o: ../Lua/lua-5.2.4/src/llex.c
+	$(CC) -c ../Lua/lua-5.2.4/src/llex.c -o ../Lua/lua-5.2.4/src/llex.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lmathlib.o: ../Lua/lua-5.2.4/src/lmathlib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lmathlib.c -o ../Lua/lua-5.2.4/src/lmathlib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lmem.o: ../Lua/lua-5.2.4/src/lmem.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lmem.c -o ../Lua/lua-5.2.4/src/lmem.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/loadlib.o: ../Lua/lua-5.2.4/src/loadlib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/loadlib.c -o ../Lua/lua-5.2.4/src/loadlib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lobject.o: ../Lua/lua-5.2.4/src/lobject.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lobject.c -o ../Lua/lua-5.2.4/src/lobject.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lopcodes.o: ../Lua/lua-5.2.4/src/lopcodes.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lopcodes.c -o ../Lua/lua-5.2.4/src/lopcodes.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/loslib.o: ../Lua/lua-5.2.4/src/loslib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/loslib.c -o ../Lua/lua-5.2.4/src/loslib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lparser.o: ../Lua/lua-5.2.4/src/lparser.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lparser.c -o ../Lua/lua-5.2.4/src/lparser.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lstate.o: ../Lua/lua-5.2.4/src/lstate.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lstate.c -o ../Lua/lua-5.2.4/src/lstate.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lstring.o: ../Lua/lua-5.2.4/src/lstring.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lstring.c -o ../Lua/lua-5.2.4/src/lstring.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lstrlib.o: ../Lua/lua-5.2.4/src/lstrlib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lstrlib.c -o ../Lua/lua-5.2.4/src/lstrlib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/ltable.o: ../Lua/lua-5.2.4/src/ltable.c
+	$(CC) -c ../Lua/lua-5.2.4/src/ltable.c -o ../Lua/lua-5.2.4/src/ltable.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/ltablib.o: ../Lua/lua-5.2.4/src/ltablib.c
+	$(CC) -c ../Lua/lua-5.2.4/src/ltablib.c -o ../Lua/lua-5.2.4/src/ltablib.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/ltm.o: ../Lua/lua-5.2.4/src/ltm.c
+	$(CC) -c ../Lua/lua-5.2.4/src/ltm.c -o ../Lua/lua-5.2.4/src/ltm.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lua.o: ../Lua/lua-5.2.4/src/lua.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lua.c -o ../Lua/lua-5.2.4/src/lua.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/luac.o: ../Lua/lua-5.2.4/src/luac.c
+	$(CC) -c ../Lua/lua-5.2.4/src/luac.c -o ../Lua/lua-5.2.4/src/luac.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lundump.o: ../Lua/lua-5.2.4/src/lundump.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lundump.c -o ../Lua/lua-5.2.4/src/lundump.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lvm.o: ../Lua/lua-5.2.4/src/lvm.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lvm.c -o ../Lua/lua-5.2.4/src/lvm.o $(CFLAGS)
+
+../Lua/lua-5.2.4/src/lzio.o: ../Lua/lua-5.2.4/src/lzio.c
+	$(CC) -c ../Lua/lua-5.2.4/src/lzio.c -o ../Lua/lua-5.2.4/src/lzio.o $(CFLAGS)

@@ -1,0 +1,127 @@
+# Project: 1_start
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = main.o ../../source/lapi.o ../../source/lauxlib.o ../../source/lbaselib.o ../../source/lbitlib.o ../../source/lcode.o ../../source/lcorolib.o ../../source/lctype.o ../../source/ldblib.o ../../source/ldebug.o ../../source/ldo.o ../../source/ldump.o ../../source/lfunc.o ../../source/lgc.o ../../source/linit.o ../../source/liolib.o ../../source/llex.o ../../source/lmathlib.o ../../source/lmem.o ../../source/loadlib.o ../../source/lobject.o ../../source/lopcodes.o ../../source/loslib.o ../../source/lparser.o ../../source/lstate.o ../../source/lstring.o ../../source/lstrlib.o ../../source/ltable.o ../../source/ltablib.o ../../source/ltm.o ../../source/lundump.o ../../source/lutf8lib.o ../../source/lvm.o ../../source/lzio.o
+LINKOBJ  = main.o ../../source/lapi.o ../../source/lauxlib.o ../../source/lbaselib.o ../../source/lbitlib.o ../../source/lcode.o ../../source/lcorolib.o ../../source/lctype.o ../../source/ldblib.o ../../source/ldebug.o ../../source/ldo.o ../../source/ldump.o ../../source/lfunc.o ../../source/lgc.o ../../source/linit.o ../../source/liolib.o ../../source/llex.o ../../source/lmathlib.o ../../source/lmem.o ../../source/loadlib.o ../../source/lobject.o ../../source/lopcodes.o ../../source/loslib.o ../../source/lparser.o ../../source/lstate.o ../../source/lstring.o ../../source/lstrlib.o ../../source/ltable.o ../../source/ltablib.o ../../source/ltm.o ../../source/lundump.o ../../source/lutf8lib.o ../../source/lvm.o ../../source/lzio.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -L"D:/keep/JuLi/Ares/project/DirectxHeaven/lib"
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"D:/keep/JuLi/Ares/project/DirectxHeaven/source"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++" -I"D:/keep/JuLi/Ares/project/DirectxHeaven/source"
+BIN      = 1_start.exe
+CXXFLAGS = $(CXXINCS) 
+CFLAGS   = $(INCS) 
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)
+
+../../source/lapi.o: ../../source/lapi.c
+	$(CC) -c ../../source/lapi.c -o ../../source/lapi.o $(CFLAGS)
+
+../../source/lauxlib.o: ../../source/lauxlib.c
+	$(CC) -c ../../source/lauxlib.c -o ../../source/lauxlib.o $(CFLAGS)
+
+../../source/lbaselib.o: ../../source/lbaselib.c
+	$(CC) -c ../../source/lbaselib.c -o ../../source/lbaselib.o $(CFLAGS)
+
+../../source/lbitlib.o: ../../source/lbitlib.c
+	$(CC) -c ../../source/lbitlib.c -o ../../source/lbitlib.o $(CFLAGS)
+
+../../source/lcode.o: ../../source/lcode.c
+	$(CC) -c ../../source/lcode.c -o ../../source/lcode.o $(CFLAGS)
+
+../../source/lcorolib.o: ../../source/lcorolib.c
+	$(CC) -c ../../source/lcorolib.c -o ../../source/lcorolib.o $(CFLAGS)
+
+../../source/lctype.o: ../../source/lctype.c
+	$(CC) -c ../../source/lctype.c -o ../../source/lctype.o $(CFLAGS)
+
+../../source/ldblib.o: ../../source/ldblib.c
+	$(CC) -c ../../source/ldblib.c -o ../../source/ldblib.o $(CFLAGS)
+
+../../source/ldebug.o: ../../source/ldebug.c
+	$(CC) -c ../../source/ldebug.c -o ../../source/ldebug.o $(CFLAGS)
+
+../../source/ldo.o: ../../source/ldo.c
+	$(CC) -c ../../source/ldo.c -o ../../source/ldo.o $(CFLAGS)
+
+../../source/ldump.o: ../../source/ldump.c
+	$(CC) -c ../../source/ldump.c -o ../../source/ldump.o $(CFLAGS)
+
+../../source/lfunc.o: ../../source/lfunc.c
+	$(CC) -c ../../source/lfunc.c -o ../../source/lfunc.o $(CFLAGS)
+
+../../source/lgc.o: ../../source/lgc.c
+	$(CC) -c ../../source/lgc.c -o ../../source/lgc.o $(CFLAGS)
+
+../../source/linit.o: ../../source/linit.c
+	$(CC) -c ../../source/linit.c -o ../../source/linit.o $(CFLAGS)
+
+../../source/liolib.o: ../../source/liolib.c
+	$(CC) -c ../../source/liolib.c -o ../../source/liolib.o $(CFLAGS)
+
+../../source/llex.o: ../../source/llex.c
+	$(CC) -c ../../source/llex.c -o ../../source/llex.o $(CFLAGS)
+
+../../source/lmathlib.o: ../../source/lmathlib.c
+	$(CC) -c ../../source/lmathlib.c -o ../../source/lmathlib.o $(CFLAGS)
+
+../../source/lmem.o: ../../source/lmem.c
+	$(CC) -c ../../source/lmem.c -o ../../source/lmem.o $(CFLAGS)
+
+../../source/loadlib.o: ../../source/loadlib.c
+	$(CC) -c ../../source/loadlib.c -o ../../source/loadlib.o $(CFLAGS)
+
+../../source/lobject.o: ../../source/lobject.c
+	$(CC) -c ../../source/lobject.c -o ../../source/lobject.o $(CFLAGS)
+
+../../source/lopcodes.o: ../../source/lopcodes.c
+	$(CC) -c ../../source/lopcodes.c -o ../../source/lopcodes.o $(CFLAGS)
+
+../../source/loslib.o: ../../source/loslib.c
+	$(CC) -c ../../source/loslib.c -o ../../source/loslib.o $(CFLAGS)
+
+../../source/lparser.o: ../../source/lparser.c
+	$(CC) -c ../../source/lparser.c -o ../../source/lparser.o $(CFLAGS)
+
+../../source/lstate.o: ../../source/lstate.c
+	$(CC) -c ../../source/lstate.c -o ../../source/lstate.o $(CFLAGS)
+
+../../source/lstring.o: ../../source/lstring.c
+	$(CC) -c ../../source/lstring.c -o ../../source/lstring.o $(CFLAGS)
+
+../../source/lstrlib.o: ../../source/lstrlib.c
+	$(CC) -c ../../source/lstrlib.c -o ../../source/lstrlib.o $(CFLAGS)
+
+../../source/ltable.o: ../../source/ltable.c
+	$(CC) -c ../../source/ltable.c -o ../../source/ltable.o $(CFLAGS)
+
+../../source/ltablib.o: ../../source/ltablib.c
+	$(CC) -c ../../source/ltablib.c -o ../../source/ltablib.o $(CFLAGS)
+
+../../source/ltm.o: ../../source/ltm.c
+	$(CC) -c ../../source/ltm.c -o ../../source/ltm.o $(CFLAGS)
+
+../../source/lundump.o: ../../source/lundump.c
+	$(CC) -c ../../source/lundump.c -o ../../source/lundump.o $(CFLAGS)
+
+../../source/lutf8lib.o: ../../source/lutf8lib.c
+	$(CC) -c ../../source/lutf8lib.c -o ../../source/lutf8lib.o $(CFLAGS)
+
+../../source/lvm.o: ../../source/lvm.c
+	$(CC) -c ../../source/lvm.c -o ../../source/lvm.o $(CFLAGS)
+
+../../source/lzio.o: ../../source/lzio.c
+	$(CC) -c ../../source/lzio.c -o ../../source/lzio.o $(CFLAGS)
