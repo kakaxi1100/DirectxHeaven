@@ -1,2 +1,2 @@
-width = 200
-height = 300
+local num = mysin(1)
+print(num)

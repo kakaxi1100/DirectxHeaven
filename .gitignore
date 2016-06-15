@@ -6,6 +6,8 @@ bin-release/
 # Other files and folders
 .settings/
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+driect_project/window_start/1_start.VC.db
+driect_project/window_start/window_start.VC.db
+driect_project/window_start/window_start.VC.VC.opendb
+driect_project/window_start/.vs
+
