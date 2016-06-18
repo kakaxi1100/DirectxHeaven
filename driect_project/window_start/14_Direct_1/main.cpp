@@ -16,16 +16,17 @@
 struct Sprites
 {
 	int x, y;
-	int index;
-	int direction;
+	int exist;
 };
 
 //全局变量声明
 HDC g_hdc = NULL, g_mdc = NULL, g_bdc = NULL;
-HBITMAP g_hSprite[4], g_hBackground;
+HBITMAP g_hHero, g_hSwordBlade, g_hBackground;
 DWORD g_tPre = 0, g_tNow = 0;
-Sprites s;
-//int count = 0;
+Sprites bullets[30];
+
+int g_iX, g_iY, g_iBulletNum;
+int g_iBackgroundX;
 
 //函数声明
 //处理消息函数
@@ -49,7 +50,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 	wndClass.hInstance = hInstance;//包含窗体实例的程序的句柄
 	wndClass.hIcon = (HICON)LoadImage(NULL, L"icon.ico", IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);//设置一个图标
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wndClass.hbrBackground = (HBRUSH)GetStockObject(DKGRAY_BRUSH);//指定一个灰色画刷句柄
+	wndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);//指定一个灰色画刷句柄
 	wndClass.lpszClassName = NULL;//不需要下拉菜单
 	wndClass.lpszClassName = L"HWWND";//指定窗口类的名字
 
@@ -70,7 +71,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 		MessageBox(hwnd, L"Faild!", L"Message", 0);
 		return FALSE;
 	}
-	PlaySound(L"仙剑·温慧.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	PlaySound(L"仙剑三·原版战斗3.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
 	//5.消息分发
 	MSG msg = { 0 };
@@ -78,18 +79,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
-
-			//wchar_t m[100];
-			////memset(m, 0, sizeof(m));
-			//swprintf_s(m, L"PeekAfter: [%d] %d", msg.message, count++);
-			//MessageBox(hwnd, m, NULL, 0);
-
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);//这个会把消息发送到winproc处理函数
 		}
 		//会被阻塞（拖动窗体试试 和 GDI_7对比下）
 		g_tNow = GetTickCount();
-		if (g_tNow - g_tPre > 100)
+		if (g_tNow - g_tPre >= 5)
 		{
 			Game_Paint(hwnd);
 			g_tPre = g_tNow;
@@ -116,54 +111,29 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			DestroyWindow(hwnd);//销毁窗体并发送一个WM_DESTROY消息
 		}
-		else if(wParam == VK_UP)
+		break;
+	case WM_LBUTTONDOWN:
+		for (int i = 0; i < 30; i++)
 		{
-			s.y -= 10;
-			s.direction = 0;
-			s.index++;
-			if (s.y < 0) {
-				s.y = 0;
-			}
-		}
-		else if (wParam == VK_DOWN)
-		{
-			s.y += 10;
-			s.direction = 1;
-			s.index++;
-			if (s.y > WINDOW_HEIGHT - 108)
+			if (!bullets[i].exist)
 			{
-				s.y = WINDOW_HEIGHT - 108;
+				bullets[i].exist = 1;
+				bullets[i].x = g_iX;
+				bullets[i].y = g_iY;
+				g_iBulletNum++;
+				break;
 			}
 		}
-		else if (wParam == VK_LEFT)
-		{
-			s.x -= 10;
-			s.direction = 2;
-			s.index++;
-			if (s.x < 0) {
-				s.x = 0;
-			}
-		}
-		else if (wParam == VK_RIGHT)
-		{
-			s.x += 10;
-			s.direction = 3;
-			s.index++;
-			if (s.x > WINDOW_WIDTH - 60)
-			{
-				s.x = WINDOW_WIDTH - 60;
-			}
-		}
+		break;
+	case WM_MOUSEMOVE:
+		g_iX = LOWORD(lParam);
+		g_iY = HIWORD(lParam);
+
 		break;
 	case WM_DESTROY:
 		Game_Cleanup(hwnd);
 		PostQuitMessage(0);
 		break;
-	//case WM_MOUSEMOVE:
-	//	wchar_t m[100];
-	//	swprintf_s(m, L"WM_MOUSEMOVE %d", count++);
-	//	MessageBox(hwnd, m, NULL, 0);
-	//	break;
 	default:
 		return DefWindowProc(hwnd, message, wParam, lParam);
 	}
@@ -179,50 +149,101 @@ BOOL Game_Init(HWND hwnd)
 
 	//1.加载位图
 	g_hBackground = (HBITMAP)LoadImage(NULL, L"bg.bmp", IMAGE_BITMAP, WINDOW_WIDTH, WINDOW_HEIGHT, LR_LOADFROMFILE);
-	g_hSprite[0] = (HBITMAP)LoadImage(NULL, L"go1.bmp", IMAGE_BITMAP, 480, 216, LR_LOADFROMFILE);//上
-	g_hSprite[1] = (HBITMAP)LoadImage(NULL, L"go2.bmp", IMAGE_BITMAP, 480, 216, LR_LOADFROMFILE);//下
-	g_hSprite[2] = (HBITMAP)LoadImage(NULL, L"go3.bmp", IMAGE_BITMAP, 480, 216, LR_LOADFROMFILE);//左
-	g_hSprite[3] = (HBITMAP)LoadImage(NULL, L"go4.bmp", IMAGE_BITMAP, 480, 216, LR_LOADFROMFILE);//右
-																							   //2.建立兼容的DC
+	g_hHero = (HBITMAP)LoadImage(NULL, L"swordman.bmp", IMAGE_BITMAP, 317, 283, LR_LOADFROMFILE);
+	g_hSwordBlade = (HBITMAP)LoadImage(NULL, L"swordblade.bmp", IMAGE_BITMAP, 100, 26, LR_LOADFROMFILE);
+	//2.建立兼容的DC
 	g_mdc = CreateCompatibleDC(g_hdc);//建立兼容设备环境的内存DC, 参数是与哪个设备兼容
 	g_bdc = CreateCompatibleDC(g_hdc);//建立后备缓冲区
 	bmp = CreateCompatibleBitmap(g_hdc, WINDOW_WIDTH, WINDOW_HEIGHT);
 	SelectObject(g_mdc, bmp);//需要先给 mdc 一张画布
 
-	s.direction = 0;
-	s.index = 0;
-	s.x = 0;
-	s.y = WINDOW_HEIGHT - 108;
+	g_iX = 300;
+	g_iY = 100;
+	g_iBulletNum = 0;
 
+	POINT pt, lt, rb;
+	RECT rect;
+	pt.x = g_iX;
+	pt.y = g_iY;
+	ClientToScreen(hwnd, &pt);//窗口坐标转化为屏幕坐标
+	SetCursorPos(pt.x, pt.y);//设置鼠标再屏幕的位置
+							 //ShowCursor(false);//隐藏光标
+							 //限制鼠标移动区域
+	GetClientRect(hwnd, &rect);//取得客户区矩形区域
+							   //GetWindowRect(hwnd, &rect);//取得窗口矩形区域, 这里得到的rect就是屏幕坐标，所以用这个的时候，不需要做ClientToScreen转换
+	lt.x = rect.left;
+	lt.y = rect.top;
+	rb.x = rect.right;
+	rb.y = rect.bottom;
+
+	ClientToScreen(hwnd, &lt);
+	ClientToScreen(hwnd, &rb);
+
+	rect.left = lt.x;
+	rect.bottom = rb.y;
+	rect.right = rb.x;
+	rect.top = lt.y;
+
+	ClipCursor(&rect);
+
+	Game_Paint(hwnd);
 	return TRUE;
 }
 
 VOID Game_Paint(HWND hwnd)
 {
-	if (s.index > 7)
+	if (g_iBackgroundX > 800)
 	{
-		s.index = 0;
+		g_iBackgroundX = 0;
 	}
-	//3.选用位图对象
 	SelectObject(g_bdc, g_hBackground);
-	//4.贴图
-	BitBlt(g_mdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, g_bdc, 0, 0, SRCCOPY);
+	BitBlt(g_mdc, g_iBackgroundX, 0, WINDOW_WIDTH - g_iBackgroundX, 600, g_bdc, 0, 0, SRCCOPY);
+	BitBlt(g_mdc, 0, 0, g_iBackgroundX, 600, g_bdc, WINDOW_WIDTH - g_iBackgroundX, 0, SRCCOPY);
 
-	SelectObject(g_bdc, g_hSprite[s.direction]);
-	BitBlt(g_mdc, s.x, s.y, 60, 108, g_bdc, s.index * 60, 108, SRCAND);
-	BitBlt(g_mdc, s.x, s.y, 60, 108, g_bdc, s.index * 60, 0, SRCPAINT);
+	//3.选用位图对象
+	SelectObject(g_bdc, g_hHero);
+	//4.贴图
+	TransparentBlt(g_mdc, g_iX, g_iY, 317, 283, g_bdc, 0, 0, 317, 283, RGB(0, 0, 0));
+
+	SelectObject(g_bdc, g_hSwordBlade);
+	for (int i = 0; i < 30; i++)
+	{
+		if (bullets[i].exist)
+		{
+			if (bullets[i].x < -100)
+			{
+				bullets[i].exist = 0;
+			}
+			else
+			{
+				TransparentBlt(g_mdc, bullets[i].x, bullets[i].y, 100, 26, g_bdc, 0, 0, 100, 26, RGB(0, 0, 0));
+				bullets[i].x -= 10;
+			}
+		}
+	}
+
+	g_iBackgroundX += 5;
+
+	HFONT hFont;
+	wchar_t str[20] = {};
+	hFont = CreateFont(20, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, TEXT("微软雅黑"));  //创建字体
+	SelectObject(g_mdc, hFont);
+	SetBkMode(g_mdc, TRANSPARENT);
+	SetTextColor(g_mdc, RGB(255, 255, 0));
+
+	swprintf_s(str, L"鼠标X坐标为%d    ", g_iX);
+	TextOut(g_mdc, 0, 0, str, wcslen(str));
+	swprintf_s(str, L"鼠标Y坐标为%d    ", g_iY);
+	TextOut(g_mdc, 0, 20, str, wcslen(str));
+	TextOut(g_mdc, 0, 20, str, wcslen(str)); swprintf_s(str, L"射出的子弹个数%d    ", g_iBulletNum);
+	TextOut(g_mdc, 0, 40, str, wcslen(str));
 
 	BitBlt(g_hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, g_mdc, 0, 0, SRCCOPY);
-
 }
 
 BOOL Game_Cleanup(HWND hwnd)
 {
 	//5.删除创建的DC和位图资源
-	DeleteObject(g_hSprite[0]);
-	DeleteObject(g_hSprite[1]);
-	DeleteObject(g_hSprite[2]);
-	DeleteObject(g_hSprite[3]);
 	DeleteObject(g_hBackground);
 	KillTimer(hwnd, 1);
 	DeleteObject(g_bdc);
