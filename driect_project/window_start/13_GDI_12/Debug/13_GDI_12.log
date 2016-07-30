@@ -1,2 +1,3 @@
 ﻿  main.cpp
   13_GDI_12.vcxproj -> D:\keep\JuLi\Ares\project\DirectxHeaven\driect_project\window_start\Debug\13_GDI_12.exe
+d:\keep\juli\ares\project\directxheaven\driect_project\window_start\13_gdi_12\main.cpp(42): warning C28251: “WinMain”的批注不一致: 此实例包含 无批注。请参见 c:\program files (x86)\windows kits\8.1\include\um\winbase.h(905)。

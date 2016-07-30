@@ -22,7 +22,8 @@ struct Sprites
 //全局变量声明
 HDC g_hdc = NULL, g_mdc = NULL, g_bdc = NULL;
 HBITMAP g_hHero, g_hSwordBlade, g_hBackground;
-DWORD g_tPre = 0, g_tNow = 0;
+ULONGLONG g_tPre = 0;
+ULONGLONG g_tNow = 0;
 Sprites bullets[30];
 
 int g_iX, g_iY, g_iBulletNum;
@@ -54,7 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 	wndClass.lpszClassName = NULL;//不需要下拉菜单
 	wndClass.lpszClassName = L"HWWND";//指定窗口类的名字
 
-									  //2.注册窗口类
+	//2.注册窗口类
 	if (!RegisterClassEx(&wndClass)) return -1;
 
 	//3.创建窗体
@@ -83,7 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 			DispatchMessage(&msg);//这个会把消息发送到winproc处理函数
 		}
 		//会被阻塞（拖动窗体试试 和 GDI_7对比下）
-		g_tNow = GetTickCount();
+		g_tNow = GetTickCount64();
 		if (g_tNow - g_tPre >= 5)
 		{
 			Game_Paint(hwnd);

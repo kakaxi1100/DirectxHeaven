@@ -1,17 +1,23 @@
-#include <Windows.h>
-#include <time.h>
-#include <wchar.h>
-#include <stdio.h>
+#include <d3d9.h>
+/**
+创接口
+取信息
+填内容
+创设备
+**/
+
 
 //添加依赖
 #pragma comment(lib, "winmm.lib")
-#pragma comment(lib, "Msimg32.lib")
+#pragma comment(lib, "d3d9.lib")
+#pragma comment(lib, "d3dx9.lib")
 
 //定义宏
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 #define WINDOW_TITLE L"Hello World!"
 
+#define SAFE_RELEASE(p) {if(p){(p)->Release(); (p)=NULL;}}
 //定义sprite结构体
 struct Sprites
 {
@@ -20,22 +26,16 @@ struct Sprites
 };
 
 //全局变量声明
-HDC g_hdc = NULL, g_mdc = NULL, g_bdc = NULL;
-HBITMAP g_hHero, g_hSwordBlade, g_hBackground;
-DWORD g_tPre = 0, g_tNow = 0;
-Sprites bullets[30];
-
-int g_iX, g_iY, g_iBulletNum;
-int g_iBackgroundX;
-
+LPDIRECT3DDEVICE9 g_pd3dDevice = NULL;
 //函数声明
 //处理消息函数
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 
 //Game Flow 函数
-BOOL Game_Init(HWND hwnd);
-VOID Game_Paint(HWND hwnd);
-BOOL Game_Cleanup(HWND hwnd);
+HRESULT Direct3D_Init(HWND hwnd);
+HRESULT Objects_Init(HWND hwnd);
+VOID Direct3D_Render(HWND hwnd);
+VOID Direct3D_CleanUp();
 
 //主函数
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine, int nShowCmd)
@@ -66,12 +66,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 	//UpdateWindow(hwnd);
 
 	//初始化游戏资源
-	if (!Game_Init(hwnd))
-	{
-		MessageBox(hwnd, L"Faild!", L"Message", 0);
-		return FALSE;
+	if (S_OK == Direct3D_Init(hwnd)) {
+		MessageBox(hwnd, L"成功！", NULL, 0);
 	}
-	PlaySound(L"仙剑三·原版战斗3.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	else {
+		MessageBox(hwnd, L"失败！", NULL, 0);
+	}
+
+	PlaySound(L"NightElf3.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
 
 	//5.消息分发
 	MSG msg = { 0 };
@@ -82,13 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);//这个会把消息发送到winproc处理函数
 		}
-		//会被阻塞（拖动窗体试试 和 GDI_7对比下）
-		g_tNow = GetTickCount();
-		if (g_tNow - g_tPre >= 5)
-		{
-			Game_Paint(hwnd);
-			g_tPre = g_tNow;
-		}
+		Direct3D_Render(hwnd);
 	}
 
 	//6.注销窗体
@@ -104,7 +100,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_TIMER:
-		Game_Paint(hwnd);
 		break;
 	case WM_KEYDOWN:
 		if (wParam == VK_ESCAPE)
@@ -112,26 +107,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DestroyWindow(hwnd);//销毁窗体并发送一个WM_DESTROY消息
 		}
 		break;
-	case WM_LBUTTONDOWN:
-		for (int i = 0; i < 30; i++)
-		{
-			if (!bullets[i].exist)
-			{
-				bullets[i].exist = 1;
-				bullets[i].x = g_iX;
-				bullets[i].y = g_iY;
-				g_iBulletNum++;
-				break;
-			}
-		}
-		break;
-	case WM_MOUSEMOVE:
-		g_iX = LOWORD(lParam);
-		g_iY = HIWORD(lParam);
-
-		break;
 	case WM_DESTROY:
-		Game_Cleanup(hwnd);
+		Direct3D_CleanUp();
 		PostQuitMessage(0);
 		break;
 	default:
@@ -140,114 +117,72 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-BOOL Game_Init(HWND hwnd)
+HRESULT Direct3D_Init(HWND hwnd)
 {
-	HBITMAP bmp;
 
-	srand((unsigned)time(NULL));
-	g_hdc = GetDC(hwnd);
-
-	//1.加载位图
-	g_hBackground = (HBITMAP)LoadImage(NULL, L"bg.bmp", IMAGE_BITMAP, WINDOW_WIDTH, WINDOW_HEIGHT, LR_LOADFROMFILE);
-	g_hHero = (HBITMAP)LoadImage(NULL, L"swordman.bmp", IMAGE_BITMAP, 317, 283, LR_LOADFROMFILE);
-	g_hSwordBlade = (HBITMAP)LoadImage(NULL, L"swordblade.bmp", IMAGE_BITMAP, 100, 26, LR_LOADFROMFILE);
-	//2.建立兼容的DC
-	g_mdc = CreateCompatibleDC(g_hdc);//建立兼容设备环境的内存DC, 参数是与哪个设备兼容
-	g_bdc = CreateCompatibleDC(g_hdc);//建立后备缓冲区
-	bmp = CreateCompatibleBitmap(g_hdc, WINDOW_WIDTH, WINDOW_HEIGHT);
-	SelectObject(g_mdc, bmp);//需要先给 mdc 一张画布
-
-	g_iX = 300;
-	g_iY = 100;
-	g_iBulletNum = 0;
-
-	POINT pt, lt, rb;
-	RECT rect;
-	pt.x = g_iX;
-	pt.y = g_iY;
-	ClientToScreen(hwnd, &pt);//窗口坐标转化为屏幕坐标
-	SetCursorPos(pt.x, pt.y);//设置鼠标再屏幕的位置
-							 //ShowCursor(false);//隐藏光标
-							 //限制鼠标移动区域
-	GetClientRect(hwnd, &rect);//取得客户区矩形区域
-							   //GetWindowRect(hwnd, &rect);//取得窗口矩形区域, 这里得到的rect就是屏幕坐标，所以用这个的时候，不需要做ClientToScreen转换
-	lt.x = rect.left;
-	lt.y = rect.top;
-	rb.x = rect.right;
-	rb.y = rect.bottom;
-
-	ClientToScreen(hwnd, &lt);
-	ClientToScreen(hwnd, &rb);
-
-	rect.left = lt.x;
-	rect.bottom = rb.y;
-	rect.right = rb.x;
-	rect.top = lt.y;
-
-	ClipCursor(&rect);
-
-	Game_Paint(hwnd);
-	return TRUE;
-}
-
-VOID Game_Paint(HWND hwnd)
-{
-	if (g_iBackgroundX > 800)
+	//1.创建Direct3D 接口对象
+	LPDIRECT3D9 pD3D = NULL;
+	if (NULL == (pD3D = Direct3DCreate9(D3D_SDK_VERSION))) 
 	{
-		g_iBackgroundX = 0;
-	}
-	SelectObject(g_bdc, g_hBackground);
-	BitBlt(g_mdc, g_iBackgroundX, 0, WINDOW_WIDTH - g_iBackgroundX, 600, g_bdc, 0, 0, SRCCOPY);
-	BitBlt(g_mdc, 0, 0, g_iBackgroundX, 600, g_bdc, WINDOW_WIDTH - g_iBackgroundX, 0, SRCCOPY);
-
-	//3.选用位图对象
-	SelectObject(g_bdc, g_hHero);
-	//4.贴图
-	TransparentBlt(g_mdc, g_iX, g_iY, 317, 283, g_bdc, 0, 0, 317, 283, RGB(0, 0, 0));
-
-	SelectObject(g_bdc, g_hSwordBlade);
-	for (int i = 0; i < 30; i++)
-	{
-		if (bullets[i].exist)
-		{
-			if (bullets[i].x < -100)
-			{
-				bullets[i].exist = 0;
-			}
-			else
-			{
-				TransparentBlt(g_mdc, bullets[i].x, bullets[i].y, 100, 26, g_bdc, 0, 0, 100, 26, RGB(0, 0, 0));
-				bullets[i].x -= 10;
-			}
-		}
+		return E_FAIL;
 	}
 
-	g_iBackgroundX += 5;
+	//2.取得硬件设备信息
+	D3DCAPS9 caps; int vp = 0;
+	if (FAILED(pD3D->GetDeviceCaps(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, &caps)))
+	{
+		return E_FAIL;
+	}
 
-	HFONT hFont;
-	wchar_t str[20] = {};
-	hFont = CreateFont(20, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, TEXT("微软雅黑"));  //创建字体
-	SelectObject(g_mdc, hFont);
-	SetBkMode(g_mdc, TRANSPARENT);
-	SetTextColor(g_mdc, RGB(255, 255, 0));
+	if (caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)//如果支持硬件定点运算, 就采用用硬件计算； 如果不支持就采用软件计算
+	{
+		vp = D3DCREATE_HARDWARE_VERTEXPROCESSING;
+	}
+	else 
+	{
+		vp = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+	}
 
-	swprintf_s(str, L"鼠标X坐标为%d    ", g_iX);
-	TextOut(g_mdc, 0, 0, str, wcslen(str));
-	swprintf_s(str, L"鼠标Y坐标为%d    ", g_iY);
-	TextOut(g_mdc, 0, 20, str, wcslen(str));
-	TextOut(g_mdc, 0, 20, str, wcslen(str)); swprintf_s(str, L"射出的子弹个数%d    ", g_iBulletNum);
-	TextOut(g_mdc, 0, 40, str, wcslen(str));
+	//3.填充内容
+	D3DPRESENT_PARAMETERS d3dpp;
+	ZeroMemory(&d3dpp, sizeof(d3dpp));
+	d3dpp.BackBufferWidth = WINDOW_WIDTH;
+	d3dpp.BackBufferHeight = WINDOW_HEIGHT;
+	d3dpp.BackBufferFormat = D3DFMT_A8R8G8B8;
+	d3dpp.BackBufferCount = 1;
+	d3dpp.MultiSampleQuality = 0;
+	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	d3dpp.hDeviceWindow = hwnd;
+	d3dpp.Windowed = true;
+	d3dpp.EnableAutoDepthStencil = true;
+	d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8;
+	d3dpp.Flags = 0;
+	d3dpp.FullScreen_RefreshRateInHz = 0;
+	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
-	BitBlt(g_hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, g_mdc, 0, 0, SRCCOPY);
+	//4.创建Direct3D设备接口
+	if (FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwnd, vp, &d3dpp, &g_pd3dDevice)))
+	{
+		return E_FAIL;
+	}
+
+	SAFE_RELEASE(pD3D);
+
+	if (!(S_OK == Objects_Init(hwnd))) return E_FAIL;
+	return S_OK;
 }
 
-BOOL Game_Cleanup(HWND hwnd)
+HRESULT Objects_Init(HWND hwnd)
 {
-	//5.删除创建的DC和位图资源
-	DeleteObject(g_hBackground);
-	KillTimer(hwnd, 1);
-	DeleteObject(g_bdc);
-	DeleteObject(g_mdc);
-	ReleaseDC(hwnd, g_hdc);
-	return TRUE;
+	return S_OK;
+}
+
+void Direct3D_Render(HWND hwnd)
+{
+
+}
+
+void Direct3D_CleanUp()
+{
+
 }
