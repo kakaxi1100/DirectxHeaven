@@ -1,5 +1,9 @@
 /********
 知识点：
+
+零、补遗
+#pragma comment(lib,"winmm.lib") //调用PlaySound函数所需库文件
+
 一、坐标点转换
  ClientToScreen();
  ScreenToClient();
@@ -46,14 +50,14 @@
 	LPCTSTR lpszFace//字体名称
  )
 
- 位图绘制
+ 位图绘制(HBITMAP)
  1.加载位图// 句柄, 名称, 加载的类型, 指定存储的宽度和高度, 加载的方式
  HANDLE LoadImage(HINSTANCE hinst, LPCTSTR lpszName, UINT uType, int cxDesired, int cyDesired, UINT fuLoad);
 
  2.建立兼容DC
  这里要与窗口的DC做兼容，为的是将内存DC 方便的转到 窗口DC 用来绘制
  HDC CreateCompatibleDC(__in HDC hdc);  DeleteDC(__IN HDC hdc);
-
+ 
  3.选用位图
  SelectObject();
 
@@ -81,7 +85,7 @@
  所以这样做要调用两次 BitBlt() 函数
 
  2.透明色彩法
- 透明色彩法是在贴图时可以设置某种颜色为透明色的函数这里用到 TransparentBlt 函数
+ 透明色彩法是在贴图时可以设置某种颜色为透明色的函数这里用到 TransparentBlt 函数 需要加 Msimg32.lib库
  BOOL TransparentBlt(
 	__in HDC hdcDest, //目标设备
 	__in int xoriginDest,//目标矩形左上角的X轴坐标
@@ -95,7 +99,6 @@
 	__in int hSrc,//源矩形的高度
 	__in UINT crTransparent//指定视为透明色的RGB颜色值
  )
-
 
 三、定时器
 WindowsAPI中 SetTimer() 建立定时器，并发送 WM_TIMER 消息
@@ -151,19 +154,48 @@ typedef struct  tagRECT{
 BOOL WINAPI GetWindowRect(_In_ HWND hWnd, _Out_ LPRECT lpRect);//取得窗口的矩形区域
 BOOL WINAPI GetClientRect(_In_ HWND hWnd, _Out_ LPRECT lpRect);//取得客户区的矩形区域
 
+五、消除闪烁
+1.创建两个兼容与窗口兼容的DC mdc, bufdc.
+2.创建与窗口兼容的位图
+HBITMAP CreateCompatibleBitmap(_In_ HDC hdc, _In_ int nWidth, _In_ int nHeight);//创建一个空的和窗口兼容的位图对象
+3.将空位图放到mdc中
+SelectObject(mdc, bmp);
+4.将load的图片赋给bufdc
+5.在BitBlt bufdc的内容到mdc
+6.最后再将mdc的内容BitBlt 到hdc
+
+六、擦除背景
+RECT clientArea;
+GetClientRect(hwnd, &clientArea);//取得客户区
+HBRUSH brush = (HBRUSH)GetStockObject(WHITE_BRUSH);//创建画刷
+FillRect(gmdc, &clientArea, brush);//把客户区刷一遍
+
 ********/
 
 #include <Windows.h>
+#include <chrono>
+#include "Map.h"
+#include "Pacman.h"
 
 //定义宏
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 820
+#define WINDOW_HEIGHT 680
 #define WINDOW_TITLE L"Hello World!"
+
 //函数声明
 //处理消息函数
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 BOOL Game_Cleanup(HWND hwnd);
+BOOL Game_Init(HWND hwnd);
+VOID Game_Paint(HWND hwnd);
 
+//声明全局变量
+HDC ghdc = nullptr, gmdc = nullptr, buffDC = nullptr;
+HBITMAP gameBitmap = nullptr, emptyBitmap = nullptr;
+std::unique_ptr<Map> map = nullptr;
+std::unique_ptr<Pacman> pacman = nullptr;
+
+std::chrono::time_point<std::chrono::system_clock> tick;
 //lpCmdLine 命令行参数
 //nCmdShow 指定程序窗口如何显示
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -178,7 +210,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 	wndClass.hInstance = hInstance;//包含窗体实例的程序的句柄
 	wndClass.hIcon = (HICON)LoadImage(NULL, L"icon.ico", IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);//设置一个图标
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wndClass.hbrBackground = (HBRUSH)GetStockObject(DKGRAY_BRUSH);//指定一个灰色画刷句柄
+	wndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);//指定一个灰色画刷句柄
 	wndClass.lpszClassName = NULL;//不需要下拉菜单
 	wndClass.lpszClassName = L"HWWND";//指定窗口类的名字
 
@@ -190,6 +222,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 	//MoveWindow(hwnd, 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, true);
 	ShowWindow(hwnd, nCmdShow);
 	//UpdateWindow(hwnd);
+	Game_Init(hwnd);
+
 	//5.消息分发
 	//消息队列应该是一个带有优先级的队列结构，因为有些消息是立即处理的。
 	MSG msg = { 0 };
@@ -201,6 +235,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 			DispatchMessage(&msg);//这个会把消息发送到winproc处理函数
 		}
 		//这里处理游戏tick
+		auto diff = std::chrono::system_clock::now() - tick;
+		
+		if (std::chrono::duration<double, std::milli>(diff).count() >= 16)
+		{
+			pacman->update();
+			Game_Paint(hwnd);
+			tick = std::chrono::system_clock::now();
+		}
 	}
 	//6.注销窗体
 	UnregisterClass(L"HWWND", hInstance);
@@ -210,19 +252,38 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 //消息处理函数
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	//PAINTSTRUCT paintStruct;
 	switch (message)
 	{
 	// 去的设备环境句柄的两种方法
 	//1. HDC BeginPaint(__in HWND hwnd, __out LPPINTSTRUCT lpPaint) 和 BOOL EndPaint(__in HWND hwnd, __in const PAINTSTRUCT *lpPaint)
 	//2. HDC GetDC(__in HWND hWnd) 和 int ReleaseDC(__in HWND hWnd, __in HDC hDC)
-	case WM_PAINT:
-		TEXT("haha");
-		//ValidateRect(hwnd, NULL);
-		break;
+	/*case WM_PAINT:
+		ghdc = BeginPaint(hwnd, &paintStruct);
+		Game_Paint(hwnd);
+		EndPaint(hwnd, &paintStruct);
+		ValidateRect(hwnd, NULL);
+		break;*/
 	case WM_KEYDOWN:
 		if (wParam == VK_ESCAPE)
 		{
 			DestroyWindow(hwnd);//销毁窗体并发送一个WM_DESTROY消息
+		}
+		if (wParam == VK_LEFT)
+		{
+			pacman->setDir(2);
+		}
+		if (wParam == VK_RIGHT)
+		{
+			pacman->setDir(0);
+		}
+		if (wParam == VK_UP)
+		{
+			pacman->setDir(3);
+		}
+		if (wParam == VK_DOWN)
+		{
+			pacman->setDir(1);
 		}
 		break;
 	case WM_DESTROY:
@@ -238,15 +299,64 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 BOOL Game_Init(HWND hwnd)
 {
+	ghdc = GetDC(hwnd);
+	gmdc = CreateCompatibleDC(ghdc);
+	buffDC = CreateCompatibleDC(ghdc);
+	emptyBitmap = CreateCompatibleBitmap(ghdc, WINDOW_WIDTH, WINDOW_HEIGHT);
+	SelectObject(gmdc, emptyBitmap);
+
+	gameBitmap = (HBITMAP)LoadImage(nullptr, L"1.bmp", IMAGE_BITMAP, 448, 128, LR_LOADFROMFILE);
+
+	map = std::make_unique<Map>(25, 20, 
+		std::vector<int>{	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+							1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
+
+	pacman = std::make_unique<Pacman>(3, 3);
+
+	Game_Paint(hwnd);
+
 	return TRUE;
 }
 
 VOID Game_Paint(HWND hwnd)
 {
+	/*SelectObject(gmdc, gameBitmap);
+	BitBlt(ghdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, gmdc, 0, 0, SRCCOPY);*/
+	//先清空gmdc的画布
+	RECT clientArea;
+	GetClientRect(hwnd, &clientArea);
+	HBRUSH brush = (HBRUSH)GetStockObject(WHITE_BRUSH);
+	FillRect(gmdc, &clientArea, brush);
 
+	map->draw(gmdc, buffDC, gameBitmap);
+	pacman->draw(gmdc, buffDC, gameBitmap);
+
+	BitBlt(ghdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, gmdc, 0, 0, SRCCOPY);
 }
 
 BOOL Game_Cleanup(HWND hwnd)
 {
+	DeleteObject(gameBitmap);
+	DeleteDC(buffDC);
+	DeleteDC(gmdc);
+	ReleaseDC(hwnd, ghdc);
 	return TRUE;
 }
