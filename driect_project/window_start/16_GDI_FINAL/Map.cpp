@@ -4,6 +4,9 @@ using namespace std;
 
 Map::Map(const int cols, const int rows, vector<int> lst):mCols(cols), mRows(rows)
 {
+	mCols = cols;
+	mRows = rows;
+
 	for (size_t i = 0; i < lst.size(); i++)
 	{
 		int r = i / cols;
@@ -21,4 +24,14 @@ void Map::draw(HDC & dest, HDC & src, HBITMAP & image)
 			grid->draw(dest, src, image);
 		}
 	}
+}
+
+const int Map::getCols() const
+{
+	return mCols;
+}
+
+const int Map::getRows() const
+{
+	return mRows;
 }

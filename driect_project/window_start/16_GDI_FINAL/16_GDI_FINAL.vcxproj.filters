@@ -47,5 +47,8 @@
     <ClInclude Include="Pacman.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="HitTest.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

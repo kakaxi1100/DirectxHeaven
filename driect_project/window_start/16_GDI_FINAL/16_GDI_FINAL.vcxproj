@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="HitTest.h" />
     <ClInclude Include="IDrawable.h" />
     <ClInclude Include="IMoveable.h" />
     <ClInclude Include="Map.h" />

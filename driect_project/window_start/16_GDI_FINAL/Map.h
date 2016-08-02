@@ -8,8 +8,11 @@ public:
 	Map(const int cols, const int rows, std::vector<int> lst);
 	~Map() = default;
 	virtual void draw(HDC& dest, HDC& src, HBITMAP& image);
-private:
-	const int mCols;
-	const int mRows;
+	const int getCols() const;
+	const int getRows() const;
+	
 	std::vector<std::unique_ptr<Grid>> map;
+private:
+	int mCols;
+	int mRows;
 };

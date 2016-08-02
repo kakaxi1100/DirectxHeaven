@@ -176,6 +176,7 @@ FillRect(gmdc, &clientArea, brush);//把客户区刷一遍
 #include <chrono>
 #include "Map.h"
 #include "Pacman.h"
+#include "HitTest.h"
 
 //定义宏
 #define WINDOW_WIDTH 820
@@ -240,6 +241,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 		if (std::chrono::duration<double, std::milli>(diff).count() >= 16)
 		{
 			pacman->update();
+			HitTest::HitWall(*pacman, *map);
 			Game_Paint(hwnd);
 			tick = std::chrono::system_clock::now();
 		}
