@@ -176,6 +176,7 @@ FillRect(gmdc, &clientArea, brush);//把客户区刷一遍
 #include <chrono>
 #include "Map.h"
 #include "Pacman.h"
+#include "Beans.h"
 #include "HitTest.h"
 
 //定义宏
@@ -192,9 +193,10 @@ VOID Game_Paint(HWND hwnd);
 
 //声明全局变量
 HDC ghdc = nullptr, gmdc = nullptr, buffDC = nullptr;
-HBITMAP gameBitmap = nullptr, emptyBitmap = nullptr;
+HBITMAP beanBitmap = nullptr , gameBitmap = nullptr, emptyBitmap = nullptr;
 std::unique_ptr<Map> map = nullptr;
 std::unique_ptr<Pacman> pacman = nullptr;
+std::unique_ptr<Beans> beans = nullptr;
 
 std::chrono::time_point<std::chrono::system_clock> tick;
 //lpCmdLine 命令行参数
@@ -241,7 +243,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 		if (std::chrono::duration<double, std::milli>(diff).count() >= 16)
 		{
 			pacman->update();
-			HitTest::HitWall(*pacman, *map);
+			HitTest::HitObject(*pacman, *map, *beans);
 			Game_Paint(hwnd);
 			tick = std::chrono::system_clock::now();
 		}
@@ -308,6 +310,7 @@ BOOL Game_Init(HWND hwnd)
 	SelectObject(gmdc, emptyBitmap);
 
 	gameBitmap = (HBITMAP)LoadImage(nullptr, L"1.bmp", IMAGE_BITMAP, 448, 128, LR_LOADFROMFILE);
+	beanBitmap = (HBITMAP)LoadImage(nullptr, L"2.bmp", IMAGE_BITMAP, 96, 32, LR_LOADFROMFILE);
 
 	map = std::make_unique<Map>(25, 20, 
 		std::vector<int>{	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -333,6 +336,9 @@ BOOL Game_Init(HWND hwnd)
 
 	pacman = std::make_unique<Pacman>(3, 3);
 
+	beans = std::make_unique<Beans>();
+	beans->init(*map);
+
 	Game_Paint(hwnd);
 
 	return TRUE;
@@ -349,6 +355,7 @@ VOID Game_Paint(HWND hwnd)
 	FillRect(gmdc, &clientArea, brush);
 
 	map->draw(gmdc, buffDC, gameBitmap);
+	beans->draw(gmdc, buffDC, beanBitmap);
 	pacman->draw(gmdc, buffDC, gameBitmap);
 
 	BitBlt(ghdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, gmdc, 0, 0, SRCCOPY);

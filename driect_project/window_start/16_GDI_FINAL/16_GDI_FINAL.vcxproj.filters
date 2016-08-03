@@ -24,6 +24,9 @@
     <ClCompile Include="Pacman.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Beans.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grid.h">
@@ -48,6 +51,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="HitTest.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Bean.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Beans.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

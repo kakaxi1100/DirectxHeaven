@@ -146,11 +146,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Beans.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pacman.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bean.h" />
+    <ClInclude Include="Beans.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="HitTest.h" />

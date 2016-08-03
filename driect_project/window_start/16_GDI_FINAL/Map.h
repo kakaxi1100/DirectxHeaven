@@ -11,7 +11,7 @@ public:
 	const int getCols() const;
 	const int getRows() const;
 	
-	std::vector<std::unique_ptr<Grid>> map;
+	std::vector<std::shared_ptr<Grid>> map;
 private:
 	int mCols;
 	int mRows;

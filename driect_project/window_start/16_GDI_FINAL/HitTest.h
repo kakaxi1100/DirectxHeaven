@@ -1,5 +1,6 @@
 #pragma once
 #include "Map.h"
+#include "Beans.h"
 #include "Pacman.h"
 
 class HitTest
@@ -8,7 +9,7 @@ public:
 	HitTest() = default;
 	~HitTest() = default;
 
-	static bool HitWall(Pacman& p, Map& m)
+	static int HitObject(Pacman& p, Map& m, Beans& b)
 	{
 		const int col = p.getCol();
 		const int row = p.getRow();
@@ -27,12 +28,13 @@ public:
 		const int leftUpType = m.map.at(upRow*m.getCols() + leftCol)->getType();
 		const int leftDownType = m.map.at(downRow*m.getCols() + leftCol)->getType();
 
+		//hit wall test
 		if (dir == 0) // right
 		{
 			if (rightUpType == 1 || rightDownType == 1)
 			{
 				p.setCol(p.getCol());
-				return true;
+				return 1;
 			}
 		}
 		else if (dir == 1)// down
@@ -40,7 +42,7 @@ public:
 			if (rightDownType == 1 || leftDownType == 1)
 			{
 				p.setRow(p.getRow());
-				return true;
+				return 1;
 			}
 		}
 		else if (dir == 2)//left
@@ -48,7 +50,7 @@ public:
 			if (leftUpType == 1 || leftDownType == 1)
 			{
 				p.setCol(p.getCol() + 1);
-				return true;
+				return 1;
 			}
 		}
 		else if (dir == 3)//up
@@ -56,10 +58,25 @@ public:
 			if (rightUpType == 1 || leftUpType == 1)
 			{
 				p.setRow(p.getRow() + 1);
-				return true;
+				return 1;
 			}
 		}
 
-		return false;
+		//hit test bean
+		for (auto it = b.beanList.begin(); it != b.beanList.end();)
+		{
+			int bx =  (*it)->getCenterX();
+			int by = (*it)->getCenterY();
+			if (bx >= left && bx <= right && by >= up && by <= down)
+			{
+				it = b.beanList.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+
+		return 0;
 	}
 };
