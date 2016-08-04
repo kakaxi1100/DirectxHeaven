@@ -10,4 +10,5 @@ public:
 	static const int WALL = 1;
 	
 	static const int Player_Speed = 4;
+	static const int Ghost_Speed = 4;
 };

@@ -7,7 +7,7 @@ Map::Map(const int cols, const int rows, vector<int> lst):mCols(cols), mRows(row
 	mCols = cols;
 	mRows = rows;
 
-	for (size_t i = 0; i < lst.size(); i++)
+	for (int i = 0; i < lst.size(); i++)
 	{
 		int r = i / cols;
 		int c = i % cols;

@@ -178,6 +178,7 @@ FillRect(gmdc, &clientArea, brush);//把客户区刷一遍
 #include "Pacman.h"
 #include "Beans.h"
 #include "HitTest.h"
+#include "Ghost.h"
 
 //定义宏
 #define WINDOW_WIDTH 820
@@ -197,6 +198,7 @@ HBITMAP beanBitmap = nullptr , gameBitmap = nullptr, emptyBitmap = nullptr;
 std::unique_ptr<Map> map = nullptr;
 std::unique_ptr<Pacman> pacman = nullptr;
 std::unique_ptr<Beans> beans = nullptr;
+Ghost g(2,2,2);
 
 std::chrono::time_point<std::chrono::system_clock> tick;
 //lpCmdLine 命令行参数
@@ -242,6 +244,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 		
 		if (std::chrono::duration<double, std::milli>(diff).count() >= 16)
 		{
+			g.update();
 			pacman->update();
 			HitTest::HitObject(*pacman, *map, *beans);
 			Game_Paint(hwnd);
@@ -357,6 +360,7 @@ VOID Game_Paint(HWND hwnd)
 	map->draw(gmdc, buffDC, gameBitmap);
 	beans->draw(gmdc, buffDC, beanBitmap);
 	pacman->draw(gmdc, buffDC, gameBitmap);
+	g.draw(gmdc, buffDC, gameBitmap);
 
 	BitBlt(ghdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, gmdc, 0, 0, SRCCOPY);
 }
