@@ -43,9 +43,25 @@ void Ghost::update()
 		mAniIndex = mAniIndex ? 0 : 1;
 		mCount = 0;
 	}
-	if (mState == 0)
+
+	if(mState == 0)
 	{
-		
+		int&& dir = getDir();
+		switch (dir)
+		{
+		case 0:
+			setX(getX() + mSpeed);
+			break;
+		case 1:
+			setY(getY() + mSpeed);
+			break;
+		case 2:
+			setX(getX() - mSpeed);
+			break;
+		case 3:
+			setY(getY() - mSpeed);
+			break;
+		}
 	}
 	else if (mState == 1)
 	{

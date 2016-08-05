@@ -1,8 +1,9 @@
 #pragma once
+#include <cstdlib>
+
 #include "GameObject.h"
 #include "IDrawable.h"
 #include "IMoveable.h"
-#include <cstdlib>
 
 class Ghost : public GameObject, public IDrawable, public IMoveable
 {

@@ -27,6 +27,9 @@
     <ClCompile Include="Beans.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Grid.h">
@@ -57,6 +60,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Beans.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

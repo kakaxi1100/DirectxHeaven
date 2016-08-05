@@ -6,8 +6,8 @@ Map::Map(const int cols, const int rows, vector<int> lst):mCols(cols), mRows(row
 {
 	mCols = cols;
 	mRows = rows;
-
-	for (int i = 0; i < lst.size(); i++)
+	int len = static_cast<int>(lst.size());
+	for (int i = 0; i < len; i++)
 	{
 		int r = i / cols;
 		int c = i % cols;

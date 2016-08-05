@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Beans.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pacman.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Bean.h" />
     <ClInclude Include="Beans.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Ghost.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="HitTest.h" />
     <ClInclude Include="IDrawable.h" />

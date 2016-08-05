@@ -198,7 +198,7 @@ HBITMAP beanBitmap = nullptr , gameBitmap = nullptr, emptyBitmap = nullptr;
 std::unique_ptr<Map> map = nullptr;
 std::unique_ptr<Pacman> pacman = nullptr;
 std::unique_ptr<Beans> beans = nullptr;
-Ghost g(2,2,2);
+std::unique_ptr<Ghost> ghost = nullptr;
 
 std::chrono::time_point<std::chrono::system_clock> tick;
 //lpCmdLine √¸¡Ó––≤Œ ˝
@@ -244,9 +244,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 		
 		if (std::chrono::duration<double, std::milli>(diff).count() >= 16)
 		{
-			g.update();
+			ghost->update();
 			pacman->update();
-			HitTest::HitObject(*pacman, *map, *beans);
+			HitTest::HitObject(*pacman, *ghost, *map, *beans);
 			Game_Paint(hwnd);
 			tick = std::chrono::system_clock::now();
 		}
@@ -338,7 +338,7 @@ BOOL Game_Init(HWND hwnd)
 							1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
 
 	pacman = std::make_unique<Pacman>(3, 3);
-
+	ghost = std::make_unique<Ghost>(2, 2, 1);
 	beans = std::make_unique<Beans>();
 	beans->init(*map);
 
@@ -360,7 +360,7 @@ VOID Game_Paint(HWND hwnd)
 	map->draw(gmdc, buffDC, gameBitmap);
 	beans->draw(gmdc, buffDC, beanBitmap);
 	pacman->draw(gmdc, buffDC, gameBitmap);
-	g.draw(gmdc, buffDC, gameBitmap);
+	ghost->draw(gmdc, buffDC, gameBitmap);
 
 	BitBlt(ghdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, gmdc, 0, 0, SRCCOPY);
 }
