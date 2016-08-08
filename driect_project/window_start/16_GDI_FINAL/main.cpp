@@ -171,8 +171,10 @@ HBRUSH brush = (HBRUSH)GetStockObject(WHITE_BRUSH);//创建画刷
 FillRect(gmdc, &clientArea, brush);//把客户区刷一遍
 
 ********/
+#pragma comment(lib,"winmm.lib")
 
 #include <Windows.h>
+#include <wchar.h>
 #include <chrono>
 #include "Map.h"
 #include "Pacman.h"
@@ -183,7 +185,7 @@ FillRect(gmdc, &clientArea, brush);//把客户区刷一遍
 //定义宏
 #define WINDOW_WIDTH 820
 #define WINDOW_HEIGHT 680
-#define WINDOW_TITLE L"Hello World!"
+#define WINDOW_TITLE L"Hello GDI!"
 
 //函数声明
 //处理消息函数
@@ -199,6 +201,7 @@ std::unique_ptr<Map> map = nullptr;
 std::unique_ptr<Pacman> pacman = nullptr;
 std::unique_ptr<Beans> beans = nullptr;
 std::unique_ptr<Ghost> ghost = nullptr;
+HFONT hFont = CreateFont(30, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, L"叶根友圆趣卡通体");
 
 std::chrono::time_point<std::chrono::system_clock> tick;
 //lpCmdLine 命令行参数
@@ -318,15 +321,15 @@ BOOL Game_Init(HWND hwnd)
 	map = std::make_unique<Map>(25, 20, 
 		std::vector<int>{	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 							1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
 							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
-							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
-							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
-							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
-							1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
-							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
-							1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
 							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+							1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
 							1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
 							1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -337,8 +340,8 @@ BOOL Game_Init(HWND hwnd)
 							1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
 							1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
 
-	pacman = std::make_unique<Pacman>(3, 3);
-	ghost = std::make_unique<Ghost>(2, 2, 1);
+	pacman = std::make_unique<Pacman>(18, 23);
+	ghost = std::make_unique<Ghost>(1, 1, 1);
 	beans = std::make_unique<Beans>();
 	beans->init(*map);
 
@@ -362,11 +365,19 @@ VOID Game_Paint(HWND hwnd)
 	pacman->draw(gmdc, buffDC, gameBitmap);
 	ghost->draw(gmdc, buffDC, gameBitmap);
 
+	SelectObject(gmdc, hFont);
+	SetBkMode(gmdc, TRANSPARENT);
+	SetTextColor(gmdc, RGB(62, 255, 80));
+	wchar_t t[20];
+	wsprintf(t, L"Score %d", HitTest::score);
+	TextOut(gmdc, 30, 5, t, wcslen(t));
+
 	BitBlt(ghdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, gmdc, 0, 0, SRCCOPY);
 }
 
 BOOL Game_Cleanup(HWND hwnd)
 {
+	DeleteObject(hFont);
 	DeleteObject(gameBitmap);
 	DeleteDC(buffDC);
 	DeleteDC(gmdc);

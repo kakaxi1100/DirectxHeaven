@@ -44,27 +44,30 @@ void Ghost::update()
 		mCount = 0;
 	}
 
-	if(mState == 0)
+	int&& dir = getDir();
+	switch (dir)
 	{
-		int&& dir = getDir();
-		switch (dir)
-		{
-		case 0:
-			setX(getX() + mSpeed);
-			break;
-		case 1:
-			setY(getY() + mSpeed);
-			break;
-		case 2:
-			setX(getX() - mSpeed);
-			break;
-		case 3:
-			setY(getY() - mSpeed);
-			break;
-		}
+	case 0:
+		setX(getX() + mSpeed);
+		break;
+	case 1:
+		setY(getY() + mSpeed);
+		break;
+	case 2:
+		setX(getX() - mSpeed);
+		break;
+	case 3:
+		setY(getY() - mSpeed);
+		break;
 	}
-	else if (mState == 1)
-	{
+}
 
-	}
+int Ghost::getState() const
+{
+	return mState;
+}
+
+void Ghost::setState(int value)
+{
+	mState = value;
 }

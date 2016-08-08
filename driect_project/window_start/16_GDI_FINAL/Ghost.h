@@ -17,11 +17,13 @@ public:
 	virtual void setDir(int value) override;
 	virtual int getDir() override;
 	void update();
+	int getState() const;
+	void setState(int value);
 private:
 	int mSpeed = Constants::Ghost_Speed;
 	int mDir = 0;
 	int mAniIndex = 0;//每副动画有两帧
 	int mCount = 0;
-	int mState = 0;// 0 是追逐， 1是逃避
+	int mState = 0;// 0 是追逐模式， 1是绕路模式
 	int mType = 0;
 };
