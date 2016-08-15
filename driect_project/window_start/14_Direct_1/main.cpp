@@ -17,6 +17,8 @@ HRESULT Clear(
 	[in] float Z, //用于指定清空深度缓冲区后每个像素对应的深度值 [0,1]
 	[in] DWORD Stencil //用于指定清空模板缓冲区中每个像素对应的模版值。它的取值范围是0到2的n次方减1。其中n是模板缓冲的深度
 )
+关于其中 Flags 的解释, 参考博客。
+
 
 还有其它几个可以返回 D3DCOLOR 的宏
 D3DCOLOR_ARGB(a, r, g, b);

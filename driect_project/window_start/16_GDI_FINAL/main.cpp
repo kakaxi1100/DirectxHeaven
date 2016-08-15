@@ -99,6 +99,8 @@
 	__in int hSrc,//源矩形的高度
 	__in UINT crTransparent//指定视为透明色的RGB颜色值
  )
+ 如:
+ TransparentBlt(g_mdc, 0, 0, 64, 64, g_bdc, 0, 0, 64, 64, RGB(0, 0, 0));
 
 三、定时器
 WindowsAPI中 SetTimer() 建立定时器，并发送 WM_TIMER 消息

@@ -59,8 +59,43 @@ HRESULT Lock(
 HRESULT Unlock()
 
 赋值的2种方式：
-VOID *pIndices = NULL;
-g_pIndexBuf->Lock(0, 0, (void**)&pIndices, 0);
+	1.	VOID *pIndices = NULL;
+		g_pIndexBuf->Lock(0, 0, (void**)&pIndices, 0);
+		pIndices[0] = 0, pIndices[1] = 2, pIndices[2] = 3;
+		...
+		g_pIndexBuf->Unlock();
+
+	2.	WORD Indices[] = {0,1,2, 0,2,3, 0,3,4,...};
+		WORD *pIndices = NULL;
+		g_pIndexBuf->Lock(0,0,(void**)&pIndices, 0);
+		memcpy(pIndices, Indices, sizeof(Indices));
+		g_pIndexBuf->Unlock();
+
+4.绘制图形
+	HRESULT SetStreamSource(
+		[in] UINT StreamNumber, //0
+		[in] IDirect3DVertexBuffer9 *pStreamData, //这个不就是顶点缓存指针吗
+		[in] UINT OffsetInBytes, //0
+		[in] UINT Stride //顶点缓存中的每个顶点结构的大小
+	)
+
+	HRESULT SetFVF(
+		[in] DWORD FVF //设置的FVF的格式
+	)
+
+	// 指定索引数组
+	HRESULT SetIndices(
+		[in] IDirect3DIndexBuffer9 *pIndexData
+	)
+
+	HRESULT DrawIndexedPrimitive(
+		[in] D3DPRIMITIVETYPE Type, // 表示要绘制的图元类型
+		[in] INT BaseVertexIndex, // 顶点缓存的索引位, 这个位置将作为索引缓存的起始点
+		[in] UINT MinIndex, // 索引数组的最小值, 一般是0, 这样索引就是 0,1,2,3...这样往后排
+		[in] UINT NumVertices, // 顶点缓存中的多少个顶点做为索引
+		[in] UINT StartIndex, // 表示从索引缓存中的第几个索引开始绘制图形
+		[in] UINT PrimitiveCount //要绘制的图元个数
+	)
 
 **/
 
@@ -84,6 +119,7 @@ g_pIndexBuf->Lock(0, 0, (void**)&pIndices, 0);
 LPDIRECT3DDEVICE9 g_pd3dDevice = NULL;
 LPD3DXFONT g_pFont = NULL;
 LPDIRECT3DVERTEXBUFFER9 g_pVertexBuffer = NULL;
+LPDIRECT3DINDEXBUFFER9 g_pIndexBuffer = NULL;
 
 //结构体声明
 struct CUSTOMVERTEX {
@@ -250,28 +286,46 @@ HRESULT Objects_Init(HWND hwnd)
 	srand(timeGetTime());
 
 	//顶点缓存操作
-	if (FAILED(g_pd3dDevice->CreateVertexBuffer(6 * sizeof(CUSTOMVERTEX), 0, D3DFVF_CUSTOMVERTEX, D3DPOOL_DEFAULT,
+	if (FAILED(g_pd3dDevice->CreateVertexBuffer(18 * sizeof(CUSTOMVERTEX), 0, D3DFVF_CUSTOMVERTEX, D3DPOOL_DEFAULT,
 		&g_pVertexBuffer, NULL)))
 	{
 		return E_FAIL;
 	}
 
-	CUSTOMVERTEX vertices[] =
+	if (FAILED(g_pd3dDevice->CreateIndexBuffer(48 * sizeof(WORD), 0, D3DFMT_INDEX16, D3DPOOL_DEFAULT,
+		&g_pIndexBuffer, NULL)))
 	{
-		{ 300.0f, 100.0f, 0.0f, 1.0f, D3DCOLOR_XRGB(rand() % 256, rand() % 256, rand() % 256) },
-		{ 500.0f, 100.0f, 0.0f, 1.0f,  D3DCOLOR_XRGB(rand() % 256, rand() % 256, rand() % 256) },
-		{ 300.0f, 300.0f, 0.0f, 1.0f,  D3DCOLOR_XRGB(rand() % 256, rand() % 256, rand() % 256) },
-		{ 300.0f, 300.0f, 0.0f, 1.0f,  D3DCOLOR_XRGB(rand() % 256, rand() % 256, rand() % 256) },
-		{ (float)(800.0*rand() / (RAND_MAX + 1.0)) , (float)(600.0*rand() / (RAND_MAX + 1.0)) , 0.0f, 1.0f,  D3DCOLOR_XRGB(rand() % 256, rand() % 256, rand() % 256) },
-		{ (float)(800.0*rand() / (RAND_MAX + 1.0)) , (float)(600.0*rand() / (RAND_MAX + 1.0)) , 0.0f, 1.0f,  D3DCOLOR_XRGB(rand() % 256, rand() % 256, rand() % 256) }
+		return E_FAIL;
+	}
 
-	};
+	CUSTOMVERTEX Vertices[17];
+	Vertices[0].x = 400;
+	Vertices[0].y = 300;
+	Vertices[0].z = 0.0f;
+	Vertices[0].rhw = 1.0f;
+	Vertices[0].color = D3DCOLOR_XRGB(rand() % 256, rand() % 256, rand() % 256);
+	for (int i = 0; i<16; i++)
+	{
+		Vertices[i + 1].x = (float)(250 * sin(i*3.14159 / 8.0)) + 400;
+		Vertices[i + 1].y = -(float)(250 * cos(i*3.14159 / 8.0)) + 300;
+		Vertices[i + 1].z = 0.0f;
+		Vertices[i + 1].rhw = 1.0f;
+		Vertices[i + 1].color = D3DCOLOR_XRGB(rand() % 256, rand() % 256, rand() % 256);
+	}
 
 	VOID* pVertices;
-	if (FAILED(g_pVertexBuffer->Lock(0, sizeof(vertices), (void**)&pVertices, 0)))
+	if (FAILED(g_pVertexBuffer->Lock(0, sizeof(Vertices), (void**)&pVertices, 0)))
 		return E_FAIL;
-	memcpy(pVertices, vertices, sizeof(vertices));
+	memcpy(pVertices, Vertices, sizeof(Vertices));
 	g_pVertexBuffer->Unlock();
+
+	//索引数组
+	WORD Indices[] = { 0,1,2, 0,2,3, 0,3,4, 0,4,5, 0,5,6, 0,6,7, 0,7,8, 0,8,9, 0,9,10, 0,10,11 ,0,11,12, 0,12,13 ,0,13,14 ,0,14,15 ,0,15,16, 0, 16,1 };
+	// 填充索引数据
+	WORD *pIndices = NULL;
+	g_pIndexBuffer->Lock(0, 0, (void**)&pIndices, 0);
+	memcpy(pIndices, Indices, sizeof(Indices));
+	g_pIndexBuffer->Unlock();
 
 	g_pd3dDevice->SetRenderState(D3DRS_CULLMODE, false);   //关掉背面消隐
 	return S_OK;
@@ -280,6 +334,7 @@ HRESULT Objects_Init(HWND hwnd)
 void Direct3D_Render(HWND hwnd)
 {
 	g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
+
 	//定义一个矩形，用于获取主窗口矩形
 	RECT formatRect;
 	GetClientRect(hwnd, &formatRect);
@@ -287,10 +342,11 @@ void Direct3D_Render(HWND hwnd)
 	g_pd3dDevice->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);//设置渲染状态
 	g_pd3dDevice->SetStreamSource(0, g_pVertexBuffer, 0, sizeof(CUSTOMVERTEX));
 	g_pd3dDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
-	g_pd3dDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 2);
+	g_pd3dDevice->SetIndices(g_pIndexBuffer);
+	g_pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 17, 0, 16);
 
 	formatRect.top = 400;
-	g_pFont->DrawText(0, _T("闪死你啊啊啊啊啊啊啊啊，狗日的！"), -1, &formatRect, DT_CENTER,
+	g_pFont->DrawText(0, _T("苍茫的天涯是我的爱，绵绵的青山脚下花正开！"), -1, &formatRect, DT_CENTER,
 		D3DCOLOR_XRGB(rand() % 256, rand() % 256, rand() % 256));//采用随机RGB值，做出“闪闪惹人爱”的特效
 	g_pd3dDevice->EndScene();
 

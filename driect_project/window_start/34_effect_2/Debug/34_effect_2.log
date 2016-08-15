@@ -1,0 +1,4 @@
+﻿  main.cpp
+d:\keep\juli\ares\project\directxheaven\driect_project\window_start\34_effect_2\main.cpp(109): warning C4101: “paintStruct”: 未引用的局部变量
+d:\keep\juli\ares\project\directxheaven\driect_project\window_start\34_effect_2\main.cpp(168): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+  34_effect_2.vcxproj -> D:\keep\JuLi\Ares\project\DirectxHeaven\driect_project\window_start\Debug\34_effect_2.exe
