@@ -26,13 +26,15 @@ struct Ball
 	float x, y, angle;
 	float w;
 	float v;
+	bool isLive;
 };
 
 //全局变量声明
 HDC g_hdc = NULL, g_mdc = NULL, g_bdc = NULL;
 HBITMAP g_hBackground, g_hBall;
 DWORD g_tPre = 0, g_tNow = 0;
-Ball ball;
+Ball balls[100] = {0};
+float g_angle = 0.0f;
 std::chrono::time_point<std::chrono::system_clock> tick;
 
 //函数声明
@@ -154,55 +156,66 @@ BOOL Game_Init(HWND hwnd)
 	bmp = CreateCompatibleBitmap(g_hdc, WINDOW_WIDTH, WINDOW_HEIGHT);
 	SelectObject(g_mdc, bmp);//需要先给 mdc 一张画布
 
-	ball.angle = 0;
-	ball.w = 0;
-	ball.v = 0;
+	for (int i = 0; i < 100; ++i)
+	{
+		Ball ball;
+		ball.angle = 0;
+		ball.x = 320 - 32;
+		ball.y = 240 - 32;
+		ball.w = 0;
+		ball.v = 10;
+		ball.isLive = false;
+		balls[i] = ball;
+	}
 	return TRUE;
 }
 
-float easeIn(float t, float d, float c, float b)
+Ball* getBall()
 {
-	return c*(1 - sqrtf(1 - (t/=d)*t)) + b;
+	for (int i = 0; i < 100; ++i)
+	{
+		if (balls[i].isLive == false)
+		{
+			return &balls[i];
+		}
+	}
+	return NULL;
 }
 
-float easeOut(float t, float d, float c, float b)
-{
-	return c*sqrtf(1 - (t = t/d - 1)*t) + b;
-}
-
-int t = 0;
 VOID Game_Paint(HWND hwnd)
 {
-	ball.x = 200 * cosf(ball.angle) + 320 ;
-	ball.y = 200 * sinf(ball.angle) ;
-	if (t <= 60) {
-		ball.angle = easeIn(t, 60, PI / 2, 0);
-	}
-	else if (t <= 120)
-	{
-		ball.angle = easeOut(t - 60, 60, PI / 2 , PI / 2);
-	}else if(t <= 180){
-		ball.angle = easeIn(t - 120, 60,  -PI / 2, PI);
-	}
-	else if (t <= 240)
-	{
-		ball.angle = easeOut(t - 180, 60, -PI / 2, PI / 2);
-	}else{
-		t = 0;
-	}
-	t++;
+
 	//3.选用位图对象
 	SelectObject(g_bdc, g_hBackground);
-	//4.贴图
+	//4.贴图 背景
 	BitBlt(g_mdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, g_bdc, 0, 0, SRCCOPY);
 
-	//SelectObject(g_bdc, g_hBall);
-	//4.贴图
-	//BitBlt(g_mdc, 400, ball.y, 64, 64, g_bdc, 0, 0, SRCCOPY);
-
+	//球
 	SelectObject(g_bdc, g_hBall);
-	TransparentBlt(g_mdc, ball.x, ball.y, 64, 64, g_bdc, 0, 0, 64, 64, RGB(0, 0, 0));
 
+	Ball* ball = getBall();
+	if (ball != NULL)
+	{
+		ball->isLive = true;
+		g_angle += 0.2;
+		ball->angle = g_angle;
+		ball->x = 320 - 32;
+		ball->y = 240 - 32;
+	}
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (balls[i].isLive == true)
+		{
+			balls[i].x += balls[i].v * cosf(balls[i].angle);
+			balls[i].y += balls[i].v * sinf(balls[i].angle);
+			TransparentBlt(g_mdc, balls[i].x, balls[i].y, 64, 64, g_bdc, 0, 0, 64, 64, RGB(0, 0, 0));	
+		}
+		if (balls[i].x <= -32 || balls[i].x >= 640 || balls[i].y <= -32 || balls[i].y >= 480)
+		{
+			balls[i].isLive = false;
+		}
+	}
 	BitBlt(g_hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, g_mdc, 0, 0, SRCCOPY);
 }
 

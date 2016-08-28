@@ -12,27 +12,13 @@
 //定义宏
 #define WINDOW_WIDTH 650
 #define WINDOW_HEIGHT 510
-#define WINDOW_TITLE L"Random Pop!"
-#define MAX_COINS 100
-#define ACC_Y 0.5f
-#define BASE_VEL 17.0f
-#define SPEED_X 3
-#define SPEED_Y 1.5
-#define PI 3.14159265f
-
-//结构体
-struct Ball
-{
-	float x, y, angle;
-	float w;
-	float v;
-};
+#define WINDOW_TITLE L"Image effect!"
 
 //全局变量声明
 HDC g_hdc = NULL, g_mdc = NULL, g_bdc = NULL;
-HBITMAP g_hBackground, g_hBall;
+HBITMAP g_hBackground;
 DWORD g_tPre = 0, g_tNow = 0;
-Ball ball;
+
 std::chrono::time_point<std::chrono::system_clock> tick;
 
 //函数声明
@@ -140,13 +126,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 BOOL Game_Init(HWND hwnd)
 {
 	HBITMAP bmp;
-
+	
 	srand((unsigned)time(NULL));
 	g_hdc = GetDC(hwnd);
-
+	
 	//1.加载位图
-	g_hBackground = (HBITMAP)LoadImage(NULL, L"2.bmp", IMAGE_BITMAP, 640, 480, LR_LOADFROMFILE);
-	g_hBall = (HBITMAP)LoadImage(NULL, L"1.bmp", IMAGE_BITMAP, 64, 64, LR_LOADFROMFILE);
+	g_hBackground = (HBITMAP)LoadImage(NULL, L"10.bmp", IMAGE_BITMAP, 640, 480, LR_LOADFROMFILE);
 
 	//2.建立兼容的DC
 	g_mdc = CreateCompatibleDC(g_hdc);//建立兼容设备环境的内存DC, 参数是与哪个设备兼容
@@ -154,54 +139,16 @@ BOOL Game_Init(HWND hwnd)
 	bmp = CreateCompatibleBitmap(g_hdc, WINDOW_WIDTH, WINDOW_HEIGHT);
 	SelectObject(g_mdc, bmp);//需要先给 mdc 一张画布
 
-	ball.angle = 0;
-	ball.w = 0;
-	ball.v = 0;
 	return TRUE;
 }
 
-float easeIn(float t, float d, float c, float b)
-{
-	return c*(1 - sqrtf(1 - (t/=d)*t)) + b;
-}
-
-float easeOut(float t, float d, float c, float b)
-{
-	return c*sqrtf(1 - (t = t/d - 1)*t) + b;
-}
-
-int t = 0;
 VOID Game_Paint(HWND hwnd)
 {
-	ball.x = 200 * cosf(ball.angle) + 320 ;
-	ball.y = 200 * sinf(ball.angle) ;
-	if (t <= 60) {
-		ball.angle = easeIn(t, 60, PI / 2, 0);
-	}
-	else if (t <= 120)
-	{
-		ball.angle = easeOut(t - 60, 60, PI / 2 , PI / 2);
-	}else if(t <= 180){
-		ball.angle = easeIn(t - 120, 60,  -PI / 2, PI);
-	}
-	else if (t <= 240)
-	{
-		ball.angle = easeOut(t - 180, 60, -PI / 2, PI / 2);
-	}else{
-		t = 0;
-	}
-	t++;
+
 	//3.选用位图对象
 	SelectObject(g_bdc, g_hBackground);
-	//4.贴图
+	//4.贴图 背景
 	BitBlt(g_mdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, g_bdc, 0, 0, SRCCOPY);
-
-	//SelectObject(g_bdc, g_hBall);
-	//4.贴图
-	//BitBlt(g_mdc, 400, ball.y, 64, 64, g_bdc, 0, 0, SRCCOPY);
-
-	SelectObject(g_bdc, g_hBall);
-	TransparentBlt(g_mdc, ball.x, ball.y, 64, 64, g_bdc, 0, 0, 64, 64, RGB(0, 0, 0));
 
 	BitBlt(g_hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, g_mdc, 0, 0, SRCCOPY);
 }

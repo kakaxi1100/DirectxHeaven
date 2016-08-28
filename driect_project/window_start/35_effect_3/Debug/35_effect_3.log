@@ -1,0 +1,5 @@
+﻿  main.cpp
+d:\keep\juli\ares\project\directxheaven\driect_project\window_start\35_effect_3\main.cpp(118): warning C4101: “paintStruct”: 未引用的局部变量
+d:\keep\juli\ares\project\directxheaven\driect_project\window_start\35_effect_3\main.cpp(200): warning C4305: “+=”: 从“double”到“float”截断
+d:\keep\juli\ares\project\directxheaven\driect_project\window_start\35_effect_3\main.cpp(212): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+  35_effect_3.vcxproj -> D:\keep\JuLi\Ares\project\DirectxHeaven\driect_project\window_start\Debug\35_effect_3.exe
